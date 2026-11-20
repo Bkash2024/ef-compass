@@ -5,6 +5,7 @@ import { EXECUTIVE_SKILLS, RATING_SCALE, WORKSHEET_SCHEMAS } from "./data.js";
 import {
   EFFORT_LEVELS, SCORE_MAX, SCORE_MIN, TOTAL_ITEMS,
   loadState, saveState, setResponse, computeTotals, getWeaknesses, getStrengths,
+  getTiedStrengths, getTiedWeaknesses,
   isAssessmentComplete, resetAssessment, getSkillById,
   addFriction, updateFriction, deleteFriction, listFriction,
   ACTION_PLAN_REQUIRED, addActionPlan, deleteActionPlan, listActionPlans,
@@ -23,6 +24,7 @@ const effortLabel = e => (e === "high-effort" ? "High-effort" : "Low-effort");
 let state = loadState();
 let currentStep = 1;
 let advanceTimer = null;
+let isTransitioning = false; // guard rapid clicks during response save
 
 const el = {
   navSteps: document.querySelectorAll(".nav-step"),
@@ -53,6 +55,7 @@ const el = {
 
 function navigateToStep(step) {
   clearTimeout(advanceTimer);
+  setScaleLocked(false); // a cancelled auto-advance must not leave the scale disabled
   stopSpeaking();
   stopBreathing();
   currentStep = step;
@@ -132,15 +135,30 @@ function renderQuestion() {
 }
 
 function selectResponse(value) {
+  // Ignore rapid clicks/keys while the auto-advance to the next question is pending
+  if (isTransitioning) return;
   const item = ITEMS[state.currentItem - 1];
   if (!item) return;
   setResponse(state, item.id, value);
   renderQuestion();
   clearTimeout(advanceTimer);
-  if (state.currentItem < TOTAL_ITEMS) advanceTimer = setTimeout(nextQuestion, 300);
+  // Only lock when an auto-advance is actually pending; on the last question there is no
+  // timer to release the lock, so the buttons must stay usable for changing the answer.
+  if (state.currentItem < TOTAL_ITEMS) {
+    setScaleLocked(true);
+    advanceTimer = setTimeout(nextQuestion, 300);
+  }
+}
+
+function setScaleLocked(locked) {
+  isTransitioning = locked;
+  el.scaleOptions.querySelectorAll(".scale-btn").forEach(btn => { btn.disabled = locked; });
 }
 
 function prevQuestion() {
+  // Cancel any pending auto‑advance timer and reset transition state
+  clearTimeout(advanceTimer);
+  setScaleLocked(false);
   if (state.currentItem > 1) {
     state.currentItem -= 1;
     saveState(state);
@@ -149,7 +167,9 @@ function prevQuestion() {
 }
 
 function nextQuestion() {
+  // Cancel any pending auto‑advance and reset transition guard
   clearTimeout(advanceTimer);
+  setScaleLocked(false);
   if (currentStep !== 2) return;
   if (state.currentItem < TOTAL_ITEMS) {
     state.currentItem += 1;
@@ -188,20 +208,40 @@ function scoreClass(total) {
   return "low";
 }
 
+/** e.g. "+1 tied at 10/18: Time Management" (empty string when nothing ties the cutoff). */
+function tieNote(tied) {
+  if (!tied.length) return "";
+  const names = tied.map(s => getSkillById(s.skillId).name).join(", ");
+  return `+${tied.length} tied at ${tied[0].total}/${SCORE_MAX}: ${names}`;
+}
+
+function legendGroup(title, entries) {
+  return `<div class="legend-group"><h4>${esc(title)}</h4><ol>${entries.map(s =>
+    `<li class="legend-item"><span>${esc(getSkillById(s.skillId).name)}</span><span>${s.total}/${SCORE_MAX}</span></li>`).join("")}</ol></div>`;
+}
+
 function renderResults() {
   const totals = computeTotals(state);
-  const strengths = getStrengths(state).map(s => getSkillById(s.skillId).name);
-  const weaknesses = getWeaknesses(state).map(s => getSkillById(s.skillId).name);
+  const strengthEntries = getStrengths(state);
+  const weaknessEntries = getWeaknesses(state);
+  const strengths = strengthEntries.map(s => getSkillById(s.skillId).name);
+  const weaknesses = weaknessEntries.map(s => getSkillById(s.skillId).name);
+  const strengthTie = tieNote(getTiedStrengths(state));
+  const weaknessTie = tieNote(getTiedWeaknesses(state));
 
   el.resultsSubtitle.textContent = state.profile.name ? `Profile for ${state.profile.name}` : "";
   el.radarChart.innerHTML = generateRadar(totals);
-  el.radarLegend.innerHTML = EXECUTIVE_SKILLS
-    .map(s => `<div class="legend-item"><strong>${esc(s.shortName)}</strong> ${esc(s.name)}</div>`).join("");
+  el.radarLegend.innerHTML = (strengthEntries.length
+      ? legendGroup("Top 3 strengths", strengthEntries) + legendGroup("Bottom 3 focus areas", weaknessEntries)
+      : "")
+    + `<p class="legend-scale">Each skill scores ${SCORE_MIN}–${SCORE_MAX} (3 items × 1–6). Select a label to open its guide.</p>`;
 
   const summary = strengths.length
     ? `<div class="skill-card summary-card">
          <p><strong>Top strengths:</strong> ${strengths.map(esc).join(", ")}</p>
+         ${strengthTie ? `<p class="tie-note">${esc(strengthTie)}</p>` : ""}
          <p><strong>Biggest challenges:</strong> ${weaknesses.map(esc).join(", ")}</p>
+         ${weaknessTie ? `<p class="tie-note">${esc(weaknessTie)}</p>` : ""}
        </div>`
     : `<div class="skill-card summary-card"><p>Answer all ${TOTAL_ITEMS} items to see strengths and challenges.</p></div>`;
 

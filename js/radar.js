@@ -10,6 +10,8 @@ const CENTER = SIZE / 2;
 const RADIUS = 150;
 const LABEL_OFFSET = 18;
 const LEVELS = 6; // rings at 3, 6, 9, 12, 15, 18
+// Horizontal padding so long labels ("Metacognition", "Persistence") never clip at either edge.
+const PAD_X = 64;
 
 function point(index, count, r) {
   const angle = (index * 2 * Math.PI) / count - Math.PI / 2;
@@ -28,7 +30,7 @@ const escapeXml = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "
 export function generateRadar(totals) {
   const n = EXECUTIVE_SKILLS.length;
   const labels = [];
-  const parts = [`<svg viewBox="0 0 ${SIZE} ${SIZE}" xmlns="http://www.w3.org/2000/svg" role="group" aria-label="Executive function radar chart. Select a skill label to open its guide.">`];
+  const parts = [`<svg viewBox="${-PAD_X} 0 ${SIZE + 2 * PAD_X} ${SIZE}" xmlns="http://www.w3.org/2000/svg" role="group" aria-label="Executive function radar chart. Select a skill label to open its guide.">`];
 
   for (let level = 1; level <= LEVELS; level++) {
     const pts = EXECUTIVE_SKILLS.map((_, i) => point(i, n, (RADIUS * level) / LEVELS)).map(p => `${p.x.toFixed(1)},${p.y.toFixed(1)}`);

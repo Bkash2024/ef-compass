@@ -149,22 +149,43 @@ export function computeTotals(state) {
   return totals;
 }
 
-/** Ranked list of fully answered skills, lowest score first (ties keep data order). */
-function rankedSkills(state) {
+/**
+ * Fully answered skills ranked strongest-first ("high") or weakest-first ("low").
+ * Ties always keep EXECUTIVE_SKILLS data order (Array.prototype.sort is stable), so
+ * top/bottom selection is deterministic.
+ */
+function rankedSkills(state, direction) {
   const totals = computeTotals(state);
   return EXECUTIVE_SKILLS
     .filter(s => totals[s.id].complete)
     .map(s => ({ skillId: s.id, total: totals[s.id].total }))
-    .sort((a, b) => a.total - b.total);
+    .sort((a, b) => (direction === "high" ? b.total - a.total : a.total - b.total));
+}
+
+/** Skills just outside the top `count` that share the cutoff score (the `count`-th place score). */
+function tiedAtCutoff(ranked, count) {
+  if (ranked.length <= count) return [];
+  const cutoff = ranked[count - 1].total;
+  return ranked.slice(count).filter(s => s.total === cutoff);
 }
 
 /** Higher score = stronger skill (items are positively worded). */
 export function getStrengths(state, count = 3) {
-  return rankedSkills(state).reverse().slice(0, count);
+  return rankedSkills(state, "high").slice(0, count);
 }
 
 export function getWeaknesses(state, count = 3) {
-  return rankedSkills(state).slice(0, count);
+  return rankedSkills(state, "low").slice(0, count);
+}
+
+/** 4th+ skills that tie the 3rd-strongest score and were left out of the top 3. */
+export function getTiedStrengths(state, count = 3) {
+  return tiedAtCutoff(rankedSkills(state, "high"), count);
+}
+
+/** 4th+ skills that tie the 3rd-weakest score and were left out of the bottom 3. */
+export function getTiedWeaknesses(state, count = 3) {
+  return tiedAtCutoff(rankedSkills(state, "low"), count);
 }
 
 export function resetAssessment(state) {
@@ -449,6 +470,38 @@ export function deleteStressLog(state, id) {
   return true;
 }
 
+/* ---------- restore (undo support for deletes) ---------- */
+
+const clampIndex = (index, length) => Math.min(Math.max(Number.isInteger(index) ? index : length, 0), length);
+
+/** Re-insert a deleted record at its old position; refuses if that id is already present. */
+function restoreAt(list, record, index) {
+  if (!record || list.some(r => r.id === record.id)) return false;
+  list.splice(clampIndex(index, list.length), 0, { ...record });
+  return true;
+}
+
+function restoreInto(state, listKey, record, index) {
+  const restored = restoreAt(state[listKey], record, index);
+  if (restored) saveState(state);
+  return restored;
+}
+
+export const restoreActionPlan = (state, plan, index) => restoreInto(state, "actionPlans", plan, index);
+export const restoreTimeLog = (state, log, index) => restoreInto(state, "timeCalibratorLogs", log, index);
+export const restorePostmortem = (state, pm, index) => restoreInto(state, "postmortems", pm, index);
+export const restoreStressLog = (state, log, index) => restoreInto(state, "stressLogs", log, index);
+
+/** Friction mappings are keyed by task id, so rebuild the object to keep the old position. */
+export function restoreFriction(state, taskId, mapping, index) {
+  if (!mapping || taskId in state.frictionMappings) return false;
+  const entries = Object.entries(state.frictionMappings);
+  entries.splice(clampIndex(index, entries.length), 0, [taskId, { ...mapping }]);
+  state.frictionMappings = Object.fromEntries(entries);
+  saveState(state);
+  return true;
+}
+
 /* ---------- JSON export / import ---------- */
 
 export function exportData(state) {
@@ -459,7 +512,9 @@ export function exportData(state) {
       ...state,
       skillTotals: computeTotals(state),
       strengths: getStrengths(state),
-      weaknesses: getWeaknesses(state)
+      weaknesses: getWeaknesses(state),
+      tiedStrengths: getTiedStrengths(state),
+      tiedWeaknesses: getTiedWeaknesses(state)
     },
     null,
     2

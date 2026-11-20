@@ -394,9 +394,9 @@ export const EXECUTIVE_SKILLS = [
       { id: 27, text: "I consider myself to be flexible and adaptive to change." }
     ],
     copingStrategies: [
-      "Pre-build a lightweight 'Plan B' for high-stakes schedules or complex workflows.",
       "When plans derail, pause and ask: 'Given what is true right now, what is the next best move?'",
-      "Build unscheduled buffer blocks into your week to absorb unexpected disruptions."
+      "Reframe the surprise with self-talk: 'This is different, not wrong'—then name one option you still control.",
+      "Practice on purpose: once a week, change one small routine (new route, different task order) to build tolerance for change."
     ],
     quickCheck: {
       question: "How can someone with low Flexibility reduce stress around unexpected disruptions?",

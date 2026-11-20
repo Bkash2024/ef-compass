@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EF-Compass</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Navigation Rail -->
+        <nav class="nav-rail">
+            <div class="nav-logo">
+                <svg viewBox="0 0 48 48" class="logo-icon">
+                    <circle cx="24" cy="24" r="20" fill="none" stroke="currentColor" stroke-width="2"/>
+                    <polygon points="24,8 26,22 38,24 26,26 24,40 22,26 10,24 22,22" fill="currentColor"/>
+                </svg>
+                <span class="logo-text">EF-Compass</span>
+            </div>
+            <div class="nav-steps">
+                <button class="nav-step active" data-step="1">
+                    <span class="step-number">1</span>
+                    <span class="step-label">Profile</span>
+                </button>
+                <button class="nav-step" data-step="2">
+                    <span class="step-number">2</span>
+                    <span class="step-label">Assessment</span>
+                </button>
+                <button class="nav-step" data-step="3">
+                    <span class="step-number">3</span>
+                    <span class="step-label">Results</span>
+                </button>
+                <button class="nav-step" data-step="4">
+                    <span class="step-number">4</span>
+                    <span class="step-label">Friction</span>
+                </button>
+                <button class="nav-step" data-step="5">
+                    <span class="step-number">5</span>
+                    <span class="step-label">Execute</span>
+                </button>
+                <button class="nav-step" data-step="6" aria-label="Reflect">
+                    <span class="step-number">6</span>
+                    <span class="step-label">Reflect</span>
+                </button>
+                <button class="nav-step" data-step="7" aria-label="EF Guide">
+                    <span class="step-number">7</span>
+                    <span class="step-label">EF Guide</span>
+                </button>
+            </div>
+            <div class="nav-actions">
+                <button class="btn-icon" id="btn-theme" title="Toggle theme">
+                    <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="5"/>
+                        <line x1="12" y1="1" x2="12" y2="3"/>
+                        <line x1="12" y1="21" x2="12" y2="23"/>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+                        <line x1="1" y1="12" x2="3" y2="12"/>
+                        <line x1="21" y1="12" x2="23" y2="12"/>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+                    </svg>
+                    <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                    </svg>
+                </button>
+                <button class="btn-icon" id="btn-export" title="Export data">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                        <polyline points="7 10 12 15 17 10"/>
+                        <line x1="12" y1="15" x2="12" y2="3"/>
+                    </svg>
+                </button>
+                <button class="btn-icon" id="btn-import" title="Import data">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                        <polyline points="17 8 12 3 7 8"/>
+                        <line x1="12" y1="3" x2="12" y2="15"/>
+                    </svg>
+                </button>
+                <input type="file" id="import-file" accept=".json" hidden>
+            </div>
+        </nav>
+
+        <!-- Main Stage -->
+        <main class="stage-container">
+            <!-- Step 1: Profile -->
+            <section class="stage active" id="stage-profile">
+                <div class="stage-header">
+                    <h1>Welcome to EF-Compass</h1>
+                    <p class="subtitle">Discover your Executive Function profile</p>
+                </div>
+                <div class="stage-content">
+                    <div class="profile-form">
+                        <div class="form-group">
+                            <label for="profile-name">Your Name</label>
+                            <input type="text" id="profile-name" placeholder="Enter your name">
+                        </div>
+                        <div class="form-group">
+                            <label for="profile-age">Age Group</label>
+                            <select id="profile-age">
+                                <option value="">Select age group</option>
+                                <option value="child">Child (8-12)</option>
+                                <option value="teen">Teen (13-17)</option>
+                                <option value="adult">Adult (18+)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="profile-context">Primary Context</label>
+                            <select id="profile-context">
+                                <option value="">Select context</option>
+                                <option value="school">School</option>
+                                <option value="work">Work</option>
+                                <option value="home">Home</option>
+                                <option value="college">College/University</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="info-card">
+                        <h3>About This Assessment</h3>
+                        <p>The EF-Compass measures 12 core executive function skills through 36 carefully designed questions. Your results will be visualized on a personalized radar chart.</p>
+                        <ul>
+                            <li>Takes approximately 10-15 minutes</li>
+                            <li>No right or wrong answers</li>
+                            <li>Based on research-backed ESQ framework</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="stage-footer">
+                    <button class="btn-primary" id="btn-start-assessment">
+                        Begin Assessment
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="5" y1="12" x2="19" y2="12"/>
+                            <polyline points="12 5 19 12 12 19"/>
+                        </svg>
+                    </button>
+                </div>
+            </section>
+
+            <!-- Step 2: Assessment -->
+            <section class="stage" id="stage-assessment">
+                <div class="stage-header">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progress-fill"></div>
+                    </div>
+                    <div class="question-counter">
+                        Question <span id="current-question">1</span> of <span id="total-questions">36</span>
+                    </div>
+                </div>
+                <div class="stage-content">
+                    <div class="question-card">
+                        <div class="question-skill-badge" id="question-skill"></div>
+                        <h2 class="question-text" id="question-text"></h2>
+                        <div class="question-context" id="question-context"></div>
+                        <div class="response-scale">
+                            <div class="scale-labels">
+                                <span>Strongly disagree</span>
+                                <span>Strongly agree</span>
+                            </div>
+                            <div class="scale-options" id="scale-options"></div>
+                            <div class="scale-selected-label" id="scale-selected-label" aria-live="polite"></div>
+                        </div>
+                    </div>
+                    <button class="btn-speech" id="btn-speech" title="Read question aloud">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+                            <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+                            <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="stage-footer">
+                    <button class="btn-secondary" id="btn-prev-question">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="19" y1="12" x2="5" y2="12"/>
+                            <polyline points="12 19 5 12 12 5"/>
+                        </svg>
+                        Previous
+                    </button>
+                    <button class="btn-primary" id="btn-next-question" disabled>
+                        Next
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="5" y1="12" x2="19" y2="12"/>
+                            <polyline points="12 5 19 12 12 19"/>
+                        </svg>
+                    </button>
+                </div>
+            </section>
+
+            <!-- Step 3: Results -->
+            <section class="stage" id="stage-results">
+                <div class="stage-header">
+                    <h1>Your EF Profile</h1>
+                    <p class="subtitle" id="results-subtitle"></p>
+                </div>
+                <div class="stage-content results-grid">
+                    <div class="radar-container">
+                        <div id="radar-chart"></div>
+                        <div class="radar-legend" id="radar-legend"></div>
+                    </div>
+                    <div class="skills-breakdown" id="skills-breakdown"></div>
+                </div>
+                <div class="stage-footer">
+                    <button class="btn-secondary" id="btn-retake">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="1 4 1 10 7 10"/>
+                            <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/>
+                        </svg>
+                        Retake Assessment
+                    </button>
+                    <button class="btn-primary" id="btn-save-results">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+                            <polyline points="17 21 17 13 7 13 7 21"/>
+                            <polyline points="7 3 7 8 15 8"/>
+                        </svg>
+                        Save Results
+                    </button>
+                </div>
+            </section>
+
+            <!-- Step 4: Friction -->
+            <section class="stage" id="stage-friction">
+                <div class="stage-header">
+                    <h1>Friction Map</h1>
+                    <p class="subtitle">List tasks that feel hard, tag the executive skill behind the friction, and get strategies for your weakest skills.</p>
+                </div>
+                <div class="stage-content">
+                    <form class="friction-form" id="friction-form">
+                        <div class="form-group">
+                            <label for="friction-desc">Task</label>
+                            <input type="text" id="friction-desc" maxlength="120" placeholder="e.g., Filing expense reports" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="friction-skill">Skill causing friction</label>
+                            <select id="friction-skill" required></select>
+                        </div>
+                        <div class="form-group">
+                            <label for="friction-effort">Effort</label>
+                            <select id="friction-effort">
+                                <option value="high-effort">High-effort</option>
+                                <option value="low-effort">Low-effort</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn-primary" id="btn-add-friction">Add task</button>
+                    </form>
+
+                    <h2 class="section-title">Your tasks</h2>
+                    <ul class="friction-list" id="friction-list"></ul>
+
+                    <h2 class="section-title">Strategies for your lowest-scoring skills</h2>
+                    <div id="friction-coping"></div>
+                </div>
+                <div class="stage-footer">
+                    <button class="btn-secondary" id="btn-friction-back">Back to Results</button>
+                </div>
+            </section>
+
+            <!-- Step 5: Execute -->
+            <section class="stage" id="stage-execute">
+                <div class="stage-header">
+                    <h1>Execute</h1>
+                    <p class="subtitle">Turn a weak skill into a concrete plan, then calibrate how long things really take.</p>
+                </div>
+                <div class="stage-content">
+                    <h2 class="section-title">Action Plan Builder</h2>
+                    <form class="plan-form" id="plan-form">
+                        <div class="plan-fields" id="plan-fields"></div>
+                        <div class="plan-actions">
+                            <button type="button" class="btn-secondary" id="btn-speak-cue">Speak Cue</button>
+                            <button type="submit" class="btn-primary">Save plan</button>
+                        </div>
+                    </form>
+                    <ul class="plan-list" id="plan-list"></ul>
+
+                    <h2 class="section-title">Time-Estimation Calibrator</h2>
+                    <form class="timer-form" id="timer-form" onsubmit="return false">
+                        <div class="form-group">
+                            <label for="timer-task">Task</label>
+                            <input type="text" id="timer-task" maxlength="120" placeholder="e.g., Write status report">
+                        </div>
+                        <div class="form-group">
+                            <label for="timer-estimate">Estimated minutes</label>
+                            <input type="number" id="timer-estimate" min="1" step="1" placeholder="30">
+                        </div>
+                    </form>
+                    <div class="stopwatch" id="stopwatch-display" role="timer" aria-label="Elapsed time">00:00</div>
+                    <div class="stopwatch-controls">
+                        <button type="button" class="btn-primary" id="btn-watch-start">Start</button>
+                        <button type="button" class="btn-secondary" id="btn-watch-pause" disabled>Pause</button>
+                        <button type="button" class="btn-secondary" id="btn-watch-complete" disabled>Complete</button>
+                    </div>
+                    <ul class="timelog-list" id="timelog-list"></ul>
+                </div>
+                <div class="stage-footer">
+                    <button class="btn-secondary" id="btn-execute-back">Back to Friction</button>
+                </div>
+            </section>
+
+            <!-- Step 6: Reflect -->
+            <section class="stage" id="stage-reflect">
+                <div class="stage-header">
+                    <h1>Reflect</h1>
+                    <p class="subtitle">Learn from what went wrong without blame, and practice calming your body before stress takes over.</p>
+                </div>
+                <div class="stage-content">
+                    <h2 class="section-title">Blameless Postmortem</h2>
+                    <p class="reflect-intro">Reflect on what happened and what you can try next time, without assigning blame.</p>
+                    <form class="plan-form" id="pm-form">
+                        <div class="plan-fields" id="pm-fields"></div>
+                        <div class="plan-actions">
+                            <button type="submit" class="btn-primary">Save postmortem</button>
+                        </div>
+                    </form>
+                    <h3 class="history-title">Saved postmortems</h3>
+                    <ul class="plan-list" id="pm-list" aria-label="Saved postmortems"></ul>
+
+                    <h2 class="section-title">Stress-Reset Lab</h2>
+                    <div class="breath-card">
+                        <div class="breath-guide">
+                            <div class="breath-orb" id="breath-orb" data-phase="idle" aria-hidden="true"></div>
+                            <div class="breath-text">
+                                <span class="breath-label" id="breath-label" aria-live="polite">Ready</span>
+                                <span class="breath-count" id="breath-count" aria-hidden="true"></span>
+                            </div>
+                        </div>
+                        <p class="breath-hint">Box breathing: 4s inhale · 4s hold · 4s exhale · 4s hold, for 2 minutes. Stop whenever you need to.</p>
+                        <div class="breath-clock" id="breath-clock" role="timer" aria-label="Time remaining">02:00</div>
+                        <div class="stopwatch-controls">
+                            <button type="button" class="btn-primary" id="btn-breath-start">Start</button>
+                            <button type="button" class="btn-secondary" id="btn-breath-stop" disabled>Stop</button>
+                        </div>
+                    </div>
+
+                    <h3 class="section-title">Log a down-regulation practice</h3>
+                    <form class="stress-form" id="stress-form">
+                        <div class="form-group">
+                            <label for="stress-date">Date</label>
+                            <input type="date" id="stress-date" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="stress-strategy">Strategy</label>
+                            <input type="text" id="stress-strategy" list="stress-strategies" maxlength="120" placeholder="e.g., Box breathing" required>
+                            <datalist id="stress-strategies">
+                                <option value="Box breathing"></option>
+                                <option value="Physiological sigh"></option>
+                                <option value="Brisk walk"></option>
+                                <option value="Progressive muscle relaxation"></option>
+                                <option value="Stepped away for a break"></option>
+                            </datalist>
+                        </div>
+                        <div class="form-group">
+                            <label for="stress-duration">Minutes</label>
+                            <input type="number" id="stress-duration" min="0.5" max="1440" step="0.5" placeholder="2" required>
+                        </div>
+                        <div class="form-group stress-notes">
+                            <label for="stress-notes">Notes</label>
+                            <textarea id="stress-notes" rows="2" placeholder="How did you feel afterwards?"></textarea>
+                        </div>
+                        <button type="submit" class="btn-primary">Log practice</button>
+                    </form>
+                    <h3 class="history-title">Practice history</h3>
+                    <ul class="timelog-list" id="stress-list" aria-label="Practice history"></ul>
+                </div>
+                <div class="stage-footer">
+                    <button class="btn-secondary" id="btn-reflect-back">Back to Execute</button>
+                </div>
+            </section>
+
+            <!-- Step 7: Executive Function Guide -->
+            <section class="stage" id="stage-guide">
+                <div class="stage-header">
+                    <h1>Executive Function Guide</h1>
+                    <p class="subtitle">Explore each skill, its patterns, and practical ways to make things easier.</p>
+                </div>
+                <div class="stage-content guide-content">
+                    <div class="guide-selector" id="guide-selector" role="group" aria-label="Choose an executive skill"></div>
+                    <div id="guide-interpreter" aria-live="polite"></div>
+                    <div class="guide-toolbar">
+                        <button type="button" class="btn-secondary" id="btn-guide-speech">Listen to Summary</button>
+                    </div>
+                    <div class="guide-tabs" id="guide-tabs" role="group" aria-label="Guide sections">
+                        <button type="button" data-guide-tab="profile" aria-pressed="true">Profile &amp; Context</button>
+                        <button type="button" data-guide-tab="brain" aria-pressed="false">Brain &amp; Patterns</button>
+                        <button type="button" data-guide-tab="interventions" aria-pressed="false">ABC Interventions</button>
+                    </div>
+                    <div class="guide-paper" id="guide-panel"></div>
+                    <section class="guide-quiz" aria-labelledby="guide-quiz-title">
+                        <h2 id="guide-quiz-title">Quick Check</h2>
+                        <div id="guide-quiz"></div>
+                        <p id="guide-feedback" aria-live="polite"></p>
+                    </section>
+                </div>
+                <div class="stage-footer">
+                    <button class="btn-secondary" id="btn-guide-back">Back to Results</button>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script type="module" src="js/app.js"></script>
+</body>
+</html>

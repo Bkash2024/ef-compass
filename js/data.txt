@@ -1,0 +1,235 @@
+/**
+ * Executive Function Data Layer
+ * Source: "The Smart but Scattered Guide to Success" by Peg Dawson & Richard Guare (2016)
+ */
+
+export const RATING_SCALE = [
+  { value: 1, label: "Strongly disagree" },
+  { value: 2, label: "Disagree" },
+  { value: 3, label: "Tend to disagree" },
+  { value: 4, label: "Tend to agree" },
+  { value: 5, label: "Agree" },
+  { value: 6, label: "Strongly agree" }
+];
+
+export const EXECUTIVE_SKILLS = [
+  {
+    id: "response_inhibition",
+    name: "Response Inhibition",
+    shortName: "Inhibition",
+    description: "The capacity to think before you act—resisting the urge to say or do something before evaluating the situation.",
+    items: [
+      { id: 1, text: "I don't jump to conclusions." },
+      { id: 2, text: "I think before I speak." },
+      { id: 3, text: "I make sure I have all the facts before I take action." }
+    ],
+    copingStrategies: [
+      "Introduce a mandatory 5-second pause before replying in high-stakes conversations.",
+      "Use a 'draft-and-wait' rule: save important emails or messages as drafts for 15 minutes before sending.",
+      "Keep a checklist of required facts to verify before committing to decisions."
+    ]
+  },
+  {
+    id: "working_memory",
+    name: "Working Memory",
+    shortName: "Memory",
+    description: "The ability to hold information in memory while performing complex tasks and draw on past learning to apply to the present.",
+    items: [
+      { id: 4, text: "I have a good memory for facts, dates, and details." },
+      { id: 5, text: "I am very good at remembering the things I have committed to do." },
+      { id: 6, text: "I seldom need reminders to complete tasks." }
+    ],
+    copingStrategies: [
+      "Externalize everything immediately into a single capture inbox rather than trusting mental recall.",
+      "Set location-based or time-based alarms for commitments the moment you make them.",
+      "Place physical cues (keys, tools, documents) directly in your exit path."
+    ]
+  },
+  {
+    id: "emotional_control",
+    name: "Emotional Control",
+    shortName: "Emotion",
+    description: "The ability to manage emotions in order to achieve goals, complete tasks, or control and direct behavior.",
+    items: [
+      { id: 7, text: "My emotions seldom get in the way of my job performance." },
+      { id: 8, text: "Little things do not affect me emotionally or distract me from the task at hand." },
+      { id: 9, text: "When frustrated or angry, I keep my cool." }
+    ],
+    copingStrategies: [
+      "Identify early physical triggers of frustration and step away for a 2-minute physiological sigh or box-breathing reset.",
+      "Prepare scripted neutral responses for predictable workplace or household friction points.",
+      "Reframe critical feedback as system debugging rather than personal judgment."
+    ]
+  },
+  {
+    id: "task_initiation",
+    name: "Task Initiation",
+    shortName: "Initiation",
+    description: "The ability to begin projects without undue procrastination, in an efficient or timely fashion.",
+    items: [
+      { id: 10, text: "No matter what the task, I believe in getting started as soon as possible." },
+      { id: 11, text: "Procrastination is usually not a problem for me." },
+      { id: 12, text: "I seldom leave tasks to the last minute." }
+    ],
+    copingStrategies: [
+      "Use the 5-Minute Rule: commit to working on the aversive task for just 5 minutes with permission to stop after.",
+      "Define the smallest physical 'first action' (e.g., 'open the file' rather than 'write the report').",
+      "Pair an unpleasant start with an immediate environmental cue (specific playlist, cup of tea, or scheduled start alarm)."
+    ]
+  },
+  {
+    id: "sustained_attention",
+    name: "Sustained Attention",
+    shortName: "Attention",
+    description: "The capacity to maintain attention to a situation or task in spite of distractibility, fatigue, or boredom.",
+    items: [
+      { id: 13, text: "I find it easy to stay focused on my work." },
+      { id: 14, text: "Once I start an assignment, I work diligently until it's completed." },
+      { id: 15, text: "Even when interrupted, I find it easy to get back and complete the job at hand." }
+    ],
+    copingStrategies: [
+      "Work in timed sprints (e.g., 25 minutes focus / 5 minutes rest) and track completed blocks.",
+      "Keep a 'Distraction Parking Lot' notepad nearby to jot down intrusive thoughts without switching browser tabs.",
+      "Leave a 'breadcrumb note' describing your exact next step whenever an interruption forces you to pause."
+    ]
+  },
+  {
+    id: "planning_prioritizing",
+    name: "Planning / Prioritizing",
+    shortName: "Planning",
+    description: "The ability to create a roadmap to reach a goal or complete a task, and to make decisions about what is important to focus on.",
+    items: [
+      { id: 16, text: "When I start my day, I have a clear plan in mind for what I hope to accomplish." },
+      { id: 17, text: "When I have a lot to do, I can easily focus on the most important things." },
+      { id: 18, text: "I typically break big tasks down into subtasks and timelines." }
+    ],
+    copingStrategies: [
+      "Limit your daily plan to a maximum of 3 'Must-Do' priorities before checking messages.",
+      "Reverse-engineer projects from the target deadline backward into concrete weekly milestones.",
+      "Use an Eisenhower matrix (Urgent vs. Important) when feeling overwhelmed by competing demands."
+    ]
+  },
+  {
+    id: "organization",
+    name: "Organization",
+    shortName: "Organization",
+    description: "The ability to create and maintain systems to keep track of information or materials.",
+    items: [
+      { id: 19, text: "I am an organized person." },
+      { id: 20, text: "It is natural for me to keep my work area neat and organized." },
+      { id: 21, text: "I am good at maintaining systems for organizing my work." }
+    ],
+    copingStrategies: [
+      "Assign every physical and digital item a single, labeled 'home' location.",
+      "Schedule a 5-minute end-of-day 'reset ritual' to clear your desk and close unused tabs.",
+      "Keep organization systems shallow (fewer nested folders, clear visual labels) so maintenance takes zero friction."
+    ]
+  },
+  {
+    id: "time_management",
+    name: "Time Management",
+    shortName: "Time Mgmt",
+    description: "The capacity to estimate how much time one has, how to allocate it, and how to stay within time limits and deadlines.",
+    items: [
+      { id: 22, text: "At the end of the day, I've usually finished what I set out to do." },
+      { id: 23, text: "I am good at estimating how long it takes to do something." },
+      { id: 24, text: "I am usually on time for appointments and activities." }
+    ],
+    copingStrategies: [
+      "Log 'Estimated Time vs. Actual Time' on routine tasks for one week to recalibrate optimism bias.",
+      "Add a 25% buffer to all task time estimates and transition windows between events.",
+      "Use visual countdown timers rather than relying on internal time perception."
+    ]
+  },
+  {
+    id: "flexibility",
+    name: "Flexibility",
+    shortName: "Flexibility",
+    description: "The ability to revise plans in the face of obstacles, setbacks, new information, or mistakes; adaptability to changing conditions.",
+    items: [
+      { id: 25, text: "I take unexpected events in stride." },
+      { id: 26, text: "I easily adjust to changes in plans and priorities." },
+      { id: 27, text: "I consider myself to be flexible and adaptive to change." }
+    ],
+    copingStrategies: [
+      "Pre-build a lightweight 'Plan B' for high-stakes schedules or complex workflows.",
+      "When plans derail, pause and ask: 'Given what is true right now, what is the next best move?'",
+      "Build unscheduled buffer blocks into your week to absorb unexpected disruptions."
+    ]
+  },
+  {
+    id: "metacognition",
+    name: "Metacognition",
+    shortName: "Metacognition",
+    description: "The ability to stand back and take a bird's-eye view of oneself in a situation—self-monitoring and self-evaluation.",
+    items: [
+      { id: 28, text: "I routinely evaluate my performance and devise methods for personal improvement." },
+      { id: 29, text: "I am able to step back from a situation to make objective decisions." },
+      { id: 30, text: "I am a 'big-picture' thinker and enjoy the problem solving that goes with that." }
+    ],
+    copingStrategies: [
+      "Run a weekly 10-minute 'Blameless Postmortem' on one task that went off track (What happened / Missed cues / Next time).",
+      "Ask a trusted peer or mentor for an outside perspective before finalizing major decisions.",
+      "Use structured checklists to verify output quality against objective criteria before finishing."
+    ]
+  },
+  {
+    id: "goal_directed_persistence",
+    name: "Goal-Directed Persistence",
+    shortName: "Persistence",
+    description: "The capacity to have a goal, follow through to the completion of that goal, and not be put off or distracted by competing interests.",
+    items: [
+      { id: 31, text: "I think of myself as being driven to meet my goals." },
+      { id: 32, text: "I easily give up immediate pleasures to work on long-term goals." },
+      { id: 33, text: "I believe in setting and achieving high levels of performance." }
+    ],
+    copingStrategies: [
+      "Break multi-month goals into visible weekly milestones with small, immediate rewards attached to each step.",
+      "Keep a visual streak tracker or progress bar in plain sight to reinforce daily momentum.",
+      "Write down your core 'Why' and review it whenever short-term distractions tempt you off course."
+    ]
+  },
+  {
+    id: "stress_tolerance",
+    name: "Stress Tolerance",
+    shortName: "Stress Tol.",
+    description: "The ability to thrive in stressful situations and to cope with uncertainty, change, and performance demands.",
+    items: [
+      { id: 34, text: "I enjoy working in a highly demanding, fast-paced environment." },
+      { id: 35, text: "A certain amount of pressure helps me perform at my best." },
+      { id: 36, text: "Jobs that include a fair degree of unpredictability appeal to me." }
+    ],
+    copingStrategies: [
+      "Reduce preventable daily friction by automating or templating repetitive decisions.",
+      "Practice brief, scheduled down-regulation techniques (breathwork, brisk walk) before high-pressure windows.",
+      "Separate controllable actions from uncontrollable variables when facing ambiguity."
+    ]
+  }
+];
+
+export const WORKSHEET_SCHEMAS = {
+  actionPlan: {
+    title: "Executive Skill Action Plan",
+    fields: [
+      { key: "targetSkillId", label: "Target Executive Skill", type: "select" },
+      { key: "situation", label: "Specific activity or situation to work on", type: "text" },
+      { key: "currentBaseline", label: "Current level of performance", type: "text" },
+      { key: "goal", label: "Goal (outcome you want to achieve)", type: "text" },
+      { key: "targetDate", label: "Target completion date", type: "date" },
+      { key: "microPractice", label: "What specific micro-habit will you practice?", type: "textarea" },
+      { key: "cue", label: "What cue will remind you to follow your plan?", type: "text" },
+      { key: "selfStatement", label: "Positive self-statement (Why & Benefits)", type: "textarea" },
+      { key: "reward", label: "Motivator / Reward for following the plan", type: "text" }
+    ]
+  },
+  learningFromMistakes: {
+    title: "Learning from Mistakes (Blameless Postmortem)",
+    fields: [
+      { key: "situation", label: "Task or situation", type: "text" },
+      { key: "whatWentWrong", label: "What went wrong?", type: "textarea" },
+      { key: "whatIDid", label: "What did I do?", type: "textarea" },
+      { key: "missedCues", label: "What cues did I miss?", type: "textarea" },
+      { key: "nextTime", label: "Next time I will...", type: "textarea" }
+    ]
+  }
+};
